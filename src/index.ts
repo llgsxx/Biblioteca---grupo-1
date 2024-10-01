@@ -98,15 +98,25 @@ function opcaoLivro() {
       limit: (input: string) => input.trim() !== "",
       limitMessage: "O nome do autor nao pode ser vazio.",
     }),
-    anoPublicacao: prompt.questionInt("Qual o ano de publicacao? ", {
-      limit: /^[0-9]{4}$/,
-      limitMessage: "Ano invalido. Deve ser um ano com quatro digitos.",
-    }),
+    anoPublicacao: solicitarAnoDePublicacao(),
     numeroPaginas: prompt.questionInt("Quantas paginas possui? ", {
       min: 1,
       limitMessage: "Numero de paginas invalido. Deve ser maior que zero.",
     }),
   };
+}
+
+function solicitarAnoDePublicacao() {
+  let ano = prompt.questionInt("Qual o ano de publicacao? ", {
+    limit: (input: string) => input.trim() !== "",
+    limitMessage: "Ano é obrigatorio",
+  });
+
+  if( ano < 1900 || ano > new Date().getFullYear()) {
+    throw new Error("Ano invalido");
+  }
+
+  return ano;
 }
 
 function opcaoRevista() {
@@ -119,10 +129,7 @@ function opcaoRevista() {
       limit: (input: string) => input.trim() !== "",
       limitMessage: "O nome do autor nao pode ser vazio.",
     }),
-    anoPublicacao: prompt.questionInt("Qual o ano de publicacao? ", {
-      limit: (input: string) => input.trim() !== "",
-      limitMessage: "O ano de publicacao nao pode ser vazio.",
-    }),
+    anoPublicacao: solicitarAnoDePublicacao(),
     edicao: prompt.question("Digite a ediçao da revista: ", {
       limit: (input: string) => input.trim() !== "",
       limitMessage: "A edicao nao pode ser vazio.",
